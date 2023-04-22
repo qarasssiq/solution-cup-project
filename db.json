@@ -2,42 +2,42 @@
   "expenses": [
     {
       "id": "1",
-      "type": "Main",
+      "type": "General expenses",
       "date": "2023-04-22",
       "amount": 100,
       "description": "I am description"
     },
     {
       "id": "2",
-      "type": "Main",
+      "type": "Housing",
       "date": "2023-04-22",
       "amount": 200,
       "description": "I am description"
     },
     {
       "id": "3",
-      "type": "Main",
+      "type": "Debt payments",
       "date": "2023-04-22",
       "amount": 300,
       "description": "I am description"
     },
     {
       "id": "4",
-      "type": "Main",
+      "type": "Vehicles and transportation costs",
       "date": "2023-04-22",
       "amount": 400,
       "description": "I am description"
     },
     {
       "id": "5",
-      "type": "Main",
+      "type": "Groceries",
       "date": "2023-04-22",
       "amount": 500,
       "description": "I am description"
     },
     {
       "id": "6",
-      "type": "Main",
+      "type": "Groceries",
       "date": "2023-04-22",
       "amount": 600,
       "description": "I am description"

@@ -1,8 +1,17 @@
 <template>
+  <header class="yellow">
+    <div class="header__title">
+      <h1 class="title">{{ title }}</h1>
+    </div>
+  </header>
   <div class="sc-main-wrapper">
-    <h1>{{ title }}</h1>
-    <scExpenses/>
+    <scExpenses />
   </div>
+  <footer class="yellow">
+    <div class="footer__text">
+      <h3>Made by Andrey Gorelov</h3>
+    </div>
+  </footer>
 </template>
 
 <script>
@@ -35,5 +44,32 @@ export default {
 .sc-main-wrapper {
   max-width: 900px;
   margin: 0 auto;
+}
+
+body {
+  margin: 0;
+}
+
+.header__title {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.title {
+  margin: 0;
+  padding: 25px 0;
+  text-align: start;
+}
+
+.yellow {
+  background-color: #f8d81c;
+}
+
+.footer__text {
+  padding: 10px 0;
+}
+
+.footer__text h3 {
+  margin: 0;
 }
 </style>

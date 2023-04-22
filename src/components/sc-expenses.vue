@@ -8,15 +8,6 @@
       Close
     </button>
 
-    <div>
-      <p>Filter</p>
-      <div class="types">
-        <template v-for="(expenseType, index) in types" :key="index">
-          <input type="checkbox" :value="expenseType" v-model="filteredTypes">{{ expenseType }}
-        </template>
-      </div>
-    </div>
-
     <form v-show="isAddFormVisible" class="add-form">
       <ul>
         <li>
@@ -27,11 +18,11 @@
         </li>
         <li>
           <label for="date">Date:</label>
-          <input type="date" id="date" name="date" v-model="date" />
+          <input type="date" id="date" name="date" class="form-input" v-model="date" />
         </li>
         <li>
           <label for="amount">Amount:</label>
-          <input type="text" id="amount" name="amount" v-model="amount" />
+          <input type="text" id="amount" name="amount" class="form-input" v-model="amount" />
         </li>
         <li>
           <label for="description">Description:</label>
@@ -41,8 +32,24 @@
       <button type="button" class="btn" @click="addExpense">Confirm</button>
     </form>
 
+    <div class="filter">
+      <h2 class="filter-text">Filter</h2>
+      <div class="filter__types">
+        <h3 class="filter__heading">Type: </h3>
+        <div class="filter__options">
+          <template v-for="(expenseType, index) in types" :key="index">
+            <input type="checkbox" :value="expenseType" class="filter-checkbox" v-model="selectedTypes">{{ expenseType }}
+          </template>
+        </div>
+      </div>
+      <div class="filter__btns">
+        <button type="button" class="filter__btn" @click="applyFilter">Apply</button>
+        <button type="button" class="filter__btn" @click="resetFilter">Reset</button>
+      </div>
+    </div>
+
     <div class="sc-expenses__list">
-      <scExpensesItem v-for="expense in expenses" :key="expense.id" :expenses_item_data="expense"
+      <scExpensesItem v-for="(expense, index) in filteredExpenses" :key="index" :expenses_item_data="expense"
         @deleteFromExpenses="deleteFromExpenses(index)" />
     </div>
   </div>
@@ -69,7 +76,9 @@ export default {
         'Debt payments',
       ],
 
-      filteredTypes: [],
+      selectedTypes: [],
+
+      filteredExpenses: [],
 
       type: '',
       date: '',
@@ -121,12 +130,22 @@ export default {
     deleteFromExpenses(index) {
       this.expenses.splice(index, 1);
     },
+
+    applyFilter() {
+      this.filteredExpenses = this.expenses.filter(item => this.selectedTypes.includes(item.type));
+    },
+
+    resetFilter() {
+      this.selectedTypes = [];
+      this.filteredExpenses = this.expenses;
+    }
   },
   mounted() {
     this.GET_EXPENSES_FROM_API()
       .then((response) => {
         if (response.data) {
           this.expenses = response.data;
+          this.filteredExpenses = this.expenses;
         }
       })
   }
@@ -164,7 +183,7 @@ label {
 }
 
 select,
-input,
+.form-input,
 textarea {
   font: 1em sans-serif;
 
@@ -186,5 +205,34 @@ textarea {
 
 .btn {
   margin: 10px;
+}
+
+.filter {
+  padding: 20px;
+  margin: 20px 0;
+  border: 1px solid;
+}
+
+.filter-text {
+  margin: 0 0 10px 0;
+  text-align: start;
+}
+
+.filter__heading {
+  margin: 0;
+  text-align: start;
+}
+
+.filter__types {
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.filter__btns {
+  display: flex;
+}
+
+.filter__btn {
+  margin-right: 10px;
 }
 </style>
