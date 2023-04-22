@@ -65,12 +65,19 @@
       <scExpensesItem v-for="(expense, index) in filteredExpenses" :key="index" :expenses_item_data="expense"
         @deleteFromExpenses="deleteFromExpenses(index)" />
     </div>
+
+    <div class="analysis">
+      <h2>Analysis</h2>
+      <div style="width: 500px; margin: 0 auto;"><canvas id="expensesByType"></canvas></div>
+    </div>
+    
   </div>
 </template>
 
 <script>
 import scExpensesItem from './sc-expenses-item.vue'
 import { mapActions, mapGetters } from 'vuex';
+import Chart from 'chart.js/auto'
 
 export default {
   name: 'sc-expenses',
@@ -200,14 +207,30 @@ export default {
       this.filteredExpenses = this.expenses;
     },
   },
-  mounted() {
-    this.GET_EXPENSES_FROM_API()
+  async mounted() {
+    await this.GET_EXPENSES_FROM_API()
       .then((response) => {
         if (response.data) {
           this.expenses = response.data;
           this.filteredExpenses = this.expenses;
         }
-      })
+      });
+
+      new Chart(
+      document.getElementById('expensesByType'),
+      {
+        type: 'doughnut',
+        data: {
+          labels: this.expenses.map(row => row.type),
+          datasets: [
+            {
+              label: 'Expenses by type',
+              data: this.expenses.map(row => row.amount)
+            }
+          ]
+        }
+      }
+    );
   }
 }
 </script>
