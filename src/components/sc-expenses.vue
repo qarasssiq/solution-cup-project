@@ -21,7 +21,7 @@
           <input type="date" id="date" name="date" class="form-input" v-model="date" />
         </li>
         <li>
-          <label for="amount">Amount:</label>
+          <label for="amount">Amount: $</label>
           <input type="text" id="amount" name="amount" class="form-input" v-model="amount" />
         </li>
         <li>
@@ -42,10 +42,23 @@
           </template>
         </div>
       </div>
+      <div class="filter__period">
+        <h3 class="filter__heading">Period: </h3>
+        <div class="filter__options">
+          <label for="dateFrom">from</label>
+          <input type="date" name="dateFrom" class="filter__date" v-model="dateFrom" />
+          <label for="dateTo">to</label>
+          <input type="date" name="dateTo" class="filter__date" v-model="dateTo" />
+        </div>
+      </div>
       <div class="filter__btns">
         <button type="button" class="filter__btn" @click="applyFilter">Apply</button>
         <button type="button" class="filter__btn" @click="resetFilter">Reset</button>
       </div>
+    </div>
+
+    <div class="total">
+      <p><span class="total__field">Total: </span>{{ total }}</p>
     </div>
 
     <div class="sc-expenses__list">
@@ -77,6 +90,8 @@ export default {
       ],
 
       selectedTypes: [],
+      dateFrom: '',
+      dateTo: '',
 
       filteredExpenses: [],
 
@@ -92,6 +107,13 @@ export default {
     ...mapGetters([
       'EXPENSES'
     ]),
+
+    total() {
+      const amounts = this.filteredExpenses.map(item => Number(item.amount));
+      return amounts.reduce((a, b) => {
+        return a + b;
+      }, 0);
+    }
   },
   methods: {
     ...mapActions([
@@ -107,6 +129,9 @@ export default {
     },
 
     addExpense() {
+      if (!this.isFormDataValid()) {
+        return;
+      }
       const expenseToAdd = {
         type: this.type,
         date: this.date,
@@ -118,6 +143,28 @@ export default {
 
       this.clearForm();
       this.isAddFormVisible = false;
+    },
+
+    isFormDataValid() {
+      if (this.formHasEmptyFields()) {
+        alert('Form has empty fields!');
+        return false;
+      }
+      if (!this.isAmountValid()) {
+        alert('Amount must be greater than 0!');
+        return false;
+      }
+      return true;
+    },
+
+    formHasEmptyFields() {
+      if (this.type == '' || this.date == '' || this.amount.trim() == '') return true;
+      return false;
+    },
+
+    isAmountValid() {
+      if (Number(this.amount) > 0) return true;
+      return false;
     },
 
     clearForm() {
@@ -132,13 +179,26 @@ export default {
     },
 
     applyFilter() {
-      this.filteredExpenses = this.expenses.filter(item => this.selectedTypes.includes(item.type));
+      if (this.selectedTypes.length > 0) {
+        this.filteredExpenses = this.expenses.filter(item => this.selectedTypes.includes(item.type));
+      }
+
+      const dateFrom = Date.parse(this.dateFrom);
+      const dateTo = Date.parse(this.dateTo);
+
+      if (!isNaN(dateFrom) && isNaN(dateTo)) {
+        this.filteredExpenses = this.filteredExpenses.filter(item => Date.parse(item.date) >= dateFrom);
+      } else if (isNaN(dateFrom) && !isNaN(dateTo)) {
+        this.filteredExpenses = this.filteredExpenses.filter(item => Date.parse(item.date) <= dateTo);
+      } else if (!isNaN(dateFrom) && !isNaN(dateTo)) {
+        this.filteredExpenses = this.filteredExpenses.filter(item => Date.parse(item.date) >= dateFrom && Date.parse(item.date) <= dateTo);
+      }
     },
 
     resetFilter() {
       this.selectedTypes = [];
       this.filteredExpenses = this.expenses;
-    }
+    },
   },
   mounted() {
     this.GET_EXPENSES_FROM_API()
@@ -153,10 +213,6 @@ export default {
 </script>
 
 <style lang="scss">
-.sc-expenses {
-  margin-bottom: 100px;
-}
-
 form {
   margin: 0 auto;
   width: 400px;
@@ -208,7 +264,7 @@ textarea {
 }
 
 .filter {
-  padding: 20px;
+  padding: 16px;
   margin: 20px 0;
   border: 1px solid;
 }
@@ -223,9 +279,14 @@ textarea {
   text-align: start;
 }
 
-.filter__types {
+.filter__types,
+.filter__period {
   display: flex;
   margin-bottom: 10px;
+}
+
+.filter__options label {
+  width: 50px;
 }
 
 .filter__btns {
@@ -234,5 +295,18 @@ textarea {
 
 .filter__btn {
   margin-right: 10px;
+}
+
+.total {
+  text-align: start;
+  text-decoration: underline;
+}
+
+.total__field {
+  font-weight: bold;
+}
+
+.filter__date {
+  width: 100px;
 }
 </style>

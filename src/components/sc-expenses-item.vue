@@ -1,10 +1,14 @@
 <template>
   <div class="sc-expenses-item">
-    <div class="sc-expenses-item__info">
-      <p><span class="sc-expenses-item__field">Type: </span>{{expenses_item_data.type}}</p>
-      <p><span class="sc-expenses-item__field">Date: </span>{{expenses_item_data.date }}</p>
-      <p><span class="sc-expenses-item__field">Amount: </span>{{expenses_item_data.amount}}</p>
-      <p><span class="sc-expenses-item__field">Description: </span>{{expenses_item_data.description}}</p>
+    <div class="sc-expenses-item__info info">
+      <div class="info__main-data">
+        <p><span class="sc-expenses-item__field">Type: </span>{{expenses_item_data.type}}</p>
+        <p><span class="sc-expenses-item__field">Date: </span>{{expenses_item_data.date }}</p>
+        <p><span class="sc-expenses-item__field">Amount: </span>$ {{expenses_item_data.amount}}</p>
+      </div>
+      <div class="info__description">
+        <p><span class="sc-expenses-item__field">Description: </span>{{expenses_item_data.description}}</p>
+      </div>
     </div>
     <button @click="deleteFromExpenses">Delete</button>
   </div>
@@ -53,5 +57,16 @@
     &__field {
       font-weight: bold;
     }
+  }
+
+  .info {
+    &__main-data {
+      display: flex;
+      margin-bottom: 5px;
+    }
+  }
+
+  .info p {
+    margin: 0 10px 0 0;
   }
 </style>

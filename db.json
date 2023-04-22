@@ -10,35 +10,35 @@
     {
       "id": "2",
       "type": "Housing",
-      "date": "2023-04-22",
+      "date": "2023-04-20",
       "amount": 200,
       "description": "I am description"
     },
     {
       "id": "3",
       "type": "Debt payments",
-      "date": "2023-04-22",
+      "date": "2023-04-18",
       "amount": 300,
       "description": "I am description"
     },
     {
       "id": "4",
       "type": "Vehicles and transportation costs",
-      "date": "2023-04-22",
+      "date": "2023-04-14",
       "amount": 400,
       "description": "I am description"
     },
     {
       "id": "5",
       "type": "Groceries",
-      "date": "2023-04-22",
+      "date": "2023-03-29",
       "amount": 500,
       "description": "I am description"
     },
     {
       "id": "6",
       "type": "Groceries",
-      "date": "2023-04-22",
+      "date": "2023-03-25",
       "amount": 600,
       "description": "I am description"
     }
